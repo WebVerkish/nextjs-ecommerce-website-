@@ -1,0 +1,263 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Coupon {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  couponCode String
+  expiryDate DateTime
+  isActive   Boolean
+
+  user   User   @relation(fields: [vendorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vendorId String @db.ObjectId
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Banner {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  link      String
+  imageUrl  String
+  isActive  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Relationships
+
+// 1 to 1 Relationships User => Profile Relation
+// 1 to many Relationships Category => Products Relation
+// many to many Relationships Market ==> Category Relation
+
+model Category {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String     @unique
+  imageUrl    String?
+  description String?
+  isActive    Boolean
+  products    Product[]
+  trainings   Training[]
+
+  marketIds String[]  @db.ObjectId
+  markets   Market[]  @relation(fields: [marketIds], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Market {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String     @unique
+  imageUrl    String?
+  description String?
+  isActive    Boolean
+  categoryIds String[]   @db.ObjectId
+  categories  Category[] @relation(fields: [categoryIds], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime?  @updatedAt
+}
+
+model Product {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  slug           String      @unique
+  imageUrl       String?
+  productImages String[]
+  description    String?
+  isActive       Boolean
+  isWholesale    Boolean
+  sku            String?
+  barcode        String?
+  productCode    String?
+  unit           String?
+  productPrice   Float
+  salePrice      Float
+  wholesalePrice Float
+  wholesaleQty   Int
+  productStock   Int
+  qty            Int
+  tags           String[]
+  orderItems     OrderItem[]
+  sales          Sale[]
+  category       Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId     String      @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique @db.ObjectId
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model FarmerProfile {
+  id                       String   @id @default(auto()) @map("_id") @db.ObjectId
+  code                     String
+  title                    String
+  profileImageUrl          String?
+  farmerEmail              String
+  farmerPhone              String
+  farmerAddress            String
+  farmerContactPerson      String?
+  farmerContactPersonPhone String?
+  farmerPaymentTerms       String?
+  farmerNotes              String?
+  isActive                 Boolean
+  products                 String[]
+  landSize                 Float
+  mainCrop                 String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Training {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String  @unique
+  imageUrl    String?
+  description String?
+  isActive    Boolean
+  content     String?
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String   @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//USER =>Admin,Farmer,Customer,Agent
+enum UserRole {
+  ADMIN
+  USER
+  FARMER
+  MODERATOR
+}
+
+model User {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String?
+  email             String?         @unique
+  password          String
+  emailVerified     Boolean         @default(false)
+  role              UserRole        @default(USER)
+  verificationToken String?
+  products          Product[]
+  coupons          Coupon[]
+  FarmerProfile     FarmerProfile[]
+  profile           UserProfile?
+  order             Order[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  sales              Sale[]
+}
+
+model UserProfile {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String    @unique @db.ObjectId
+  dateOfBirth DateTime?
+  profileImageUrl String?
+  address     String?
+  //Personal Details
+  name     String?
+  firstName     String?
+  lastName      String?
+  email  String?
+  username  String?
+  phone  String?
+  //Shipping Details
+  streetAddress String?
+  city          String?
+  country       String?
+  zipCode       String?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// model Profile{
+//   id          String     @id @default(auto()) @map("_id") @db.ObjectId
+//   user User @relation(fields: [id], references: [id])
+//   userId String @unique
+// }
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+model Order {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String      @db.ObjectId
+  //Personal Details
+  firstName     String
+  lastName      String
+  emailAddress  String
+  phoneNumber   String
+  //Shipping Details
+  streetAddress String
+  city          String
+  country       String
+  zipCode       String
+  shippingCost  Float
+  //Payment Method
+  paymentMethod String
+  orderNumber   String?
+  //Order Items
+  orderItems    OrderItem[]
+  orderStatus   OrderStatus @default(PROCESSING) // Set PENDING as the default value
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          User        @relation(fields: [userId], references: [id])
+  sales          Sale[]
+}
+
+model OrderItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String   @db.ObjectId
+  productId String   @db.ObjectId
+  vendorId  String   @db.ObjectId
+  imageUrl  String?
+  title     String?
+  quantity  Int
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model Sale {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String   @db.ObjectId
+  productId String   @db.ObjectId
+  vendorId  String   @db.ObjectId
+  total     Float
+  productTitle String
+  productImage String
+  productQty  Int
+  productPrice Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  vendor    User     @relation(fields: [vendorId], references: [id])
+}
