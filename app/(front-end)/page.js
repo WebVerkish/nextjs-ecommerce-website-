@@ -16,6 +16,7 @@ export default async function Home() {
   //console.log(categories)
   const session = await getServerSession(authOptions);
   console.log(session?.user);
+  const trainings = await getData("trainings");
   return (
     <div className="min-h-screen">
       <Hero />
@@ -28,7 +29,7 @@ export default async function Home() {
         );
       })}
       <div className="py-8">
-        <CommunityTrainings />
+        <CommunityTrainings title="Featured Trainigs" trainings={trainings.slice(0,3)}/>
       </div>
       {/* <h2 className="text-4xl">Welcome to Ecommerce Site</h2>
       <Link className="my-4 underline" href="/register-farmer">Become a farmer / Vendor / Supplier</Link> */}

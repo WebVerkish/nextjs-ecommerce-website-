@@ -1,7 +1,8 @@
 import React from 'react'
 import LargeCard from './LargeCard'
 
- export default function LargeCards() {
+ export default function LargeCards({sales}) {
+    const totalSales = sales.reduce((acc,item)=>acc+item.total,0).toFixed(2) ?? 0;
     const orderStats = [
         {
             period:"Today Orders",
@@ -20,7 +21,7 @@ import LargeCard from './LargeCard'
         },
         {
             period:"All-time Sales",
-            sales:5000000,
+            sales:totalSales,
             color:"bg-purple-600"
         }
     ]

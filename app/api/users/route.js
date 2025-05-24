@@ -73,8 +73,8 @@ export async function POST(request) {
     }
 
     // Extract and validate credentials
-    const { name, email, password, role } = await request.json();
-    if (!name || !email || !password || !role) {
+    const { name, email, password, role,plan } = await request.json();
+    if (!name || !email || !password || !role || !plan) {
       return NextResponse.json(
         { data: null, message: "Missing required fields" },
         { status: 400 }
@@ -107,6 +107,7 @@ export async function POST(request) {
         email,
         password: hashedPassword,
         role,
+        plan,
         verificationToken: token,
       },
     });

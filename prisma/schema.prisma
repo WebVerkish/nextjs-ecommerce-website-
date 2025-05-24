@@ -109,6 +109,8 @@ model FarmerProfile {
   code                     String
   title                    String
   profileImageUrl          String?
+  firstName               String?
+  lastName                  String?
   farmerEmail              String
   farmerPhone              String
   farmerAddress            String
@@ -159,7 +161,9 @@ model User {
   password          String
   emailVerified     Boolean         @default(false)
   role              UserRole        @default(USER)
+  plan             String?         
   verificationToken String?
+  status            Boolean             @default(false)
   products          Product[]
   coupons          Coupon[]
   FarmerProfile     FarmerProfile[]

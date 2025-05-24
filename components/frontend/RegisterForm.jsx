@@ -2,7 +2,7 @@
 
 import { Github } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -11,6 +11,8 @@ import TextInput from "../formInputs/TextInput";
 
 export default function RegisterForm({ role = "USER" }) {
   const router = useRouter(); //Redirecting on the client side
+  const searchParams = useSearchParams();
+  const plan = searchParams.get("plan");
   const {
     register,
     handleSubmit,
@@ -20,6 +22,7 @@ export default function RegisterForm({ role = "USER" }) {
   const [loading, setLoading] = useState(false);
   const [emailErr, setEmailErr] = useState("");
   async function onSubmit(data) {
+    data.plan = plan;
     try {
       //console.log(data);
       setLoading(true);
@@ -43,7 +46,8 @@ export default function RegisterForm({ role = "USER" }) {
         if (role === "USER") {
           router.push("/");
         } else {
-          router.push("/verify-email");
+          const {data} = responseData;
+          router.push(`/verify-email?userId=${data.id}`);
         }
       } else {
         setLoading(false);
@@ -142,7 +146,7 @@ export default function RegisterForm({ role = "USER" }) {
           <p className="text-[0.75rem] font-light text-gray-500 dark:text-gray-400">
             Are you a Farmer?{" "}
             <Link
-              href="/register-farmer"
+              href="/farmer-pricing"
               className="font-medium text-purple-600 hover:underline dark:text-purple-500"
             >
               Register Here

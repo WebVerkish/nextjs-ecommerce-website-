@@ -58,6 +58,7 @@ export async function DELETE(request, { params: { id } }) {
     );
   }
 }
+//farmer status and emailVerified details update
 export async function PUT(request, { params: { id } }) {
   try {
     const
@@ -119,6 +120,43 @@ export async function PUT(request, { params: { id } }) {
     return NextResponse.json(
       {
         message: "Failed to Update Coupon",
+        error,
+      },
+      { status: 500 }
+    );
+  }
+}
+//farmer details update
+export async function PUT(request, { params: { id } }) {
+  try {
+    const
+        {
+          status,emailVerified
+        } = await request.json();
+    const existingUser = await db.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!existingUser) {
+      return NextResponse.json(
+        {
+          data: null,
+          message: "Not Found",
+        },
+        { status: 409 }
+      );
+    }
+    const updateUser = await db.user.update({
+      where: { id },
+      data: {status,emailVerified},
+    });
+    return NextResponse.json(updateUser);
+  } catch (error) {
+    //console.log(error);
+    return NextResponse.json(
+      {
+        message: "Failed to Update User",
         error,
       },
       { status: 500 }

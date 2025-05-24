@@ -1,7 +1,12 @@
+import { getData } from "@/lib/getData";
 import { Info } from "lucide-react";
 import React from "react";
 
-export default function VerifyMail() {
+export default  async function VerifyMail({searchParams}) {
+  const {userId} = searchParams;
+  const user = await getData(`users/${userId}`);
+  const {email} = user;
+  console.log(userId);
   return (
     <div className="max-w-2xl mx-auto min-h-screen mt-8">
       <div
@@ -18,8 +23,9 @@ export default function VerifyMail() {
         </div>
         <div className="mt-2 mb-4 text-sm">
           Thank you for creating an account with Us, we have sent you an email
-          to verify your account. Please check your email and click on the link
-          to verify your account.
+          to verify your <span className="font-bold">{email}</span>. Please check your inbox and click on the link
+          to complete your onboarding process.
+          <button className="mx-4 text-white">Change email</button>
         </div>
       </div>
     </div>

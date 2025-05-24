@@ -57,6 +57,9 @@ export async function GET(request) {
       orderBy: {
         createdAt: "desc",
       },
+      include:{
+        category:true,
+      }
     });
     return NextResponse.json(trainings);
   } catch (error) {

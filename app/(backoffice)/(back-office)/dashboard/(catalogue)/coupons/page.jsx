@@ -17,6 +17,7 @@ export default async function Coupons() {
   const role = session?.user?.role;
   const id = session?.user?.id;
   const coupons = await getData("coupons");
+  console.log(coupons);
   const farmerCoupons = coupons.filter((coupon) => coupon.vendorId === id);
   return (
     <div>

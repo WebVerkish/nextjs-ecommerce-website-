@@ -7,23 +7,23 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Product from "./Product";
 
-export default function CategoryCarousel({ products }) {
+export default function CategoryCarousel({ products,isMarketPage=false }) {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
-      items: 5,
+      items: isMarketPage ? 3 : 4,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 4,
+      items: isMarketPage ? 3 : 4,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 3,
+      items: isMarketPage ? 2 : 3,
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 2,
+      items: isMarketPage ? 1 : 2,
     },
   };
 

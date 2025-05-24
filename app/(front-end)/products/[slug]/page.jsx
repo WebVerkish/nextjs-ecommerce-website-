@@ -1,5 +1,8 @@
+import AddToCartButton from "@/components/frontend/AddToCartButton";
 import Breadcrumb from "@/components/frontend/Breadcrumb";
 import CategoryCarousel from "@/components/frontend/CategoryCarousel";
+import ProductImageCrousel from "@/components/frontend/ProductImageCrousel";
+import ProductShareButton from "@/components/frontend/ProductShareButton";
 import { getData } from "@/lib/getData";
 import { BaggageClaim, Minus, Plus, Send, Share2, Tag } from "lucide-react";
 import Image from "next/image";
@@ -8,24 +11,23 @@ import React from "react";
 
 export default async function ProductDetailsPage({ params: { slug } }) {
   const product = await getData(`products/product/${slug}`);
+  const productId = product.id;
+  const catId = product.categoryId;
+  const category = await getData(`categories/${catId}`);
+  const categoryProducts = category.products;
+  const products = categoryProducts.filter((product)=>product.id !== productId);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const urlToShare = `${baseUrl}/product/${slug}`;
   return (
     <div>
       <Breadcrumb />
       <div className="grid grid-cols-12 gap-5 mb-8">
-        <div className="col-span-3">
-          <Image
-            src={product.imageUrl}
-            alt={product.title}
-            width={556}
-            height={556}
-            className="w-full"
-          />
-        </div>
+        <ProductImageCrousel productImages={product.productImages} thumbnail={product.imageUrl}/>
         <div className="col-span-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl lg:text-3xl">{product.title}</h2>
             <button>
-              <Share2 />
+              <ProductShareButton urlToShare={urlToShare} />
             </button>
           </div>
           <div className="border-b border-gray-400">
@@ -50,7 +52,10 @@ export default async function ProductDetailsPage({ params: { slug } }) {
             </p>
           </div>
           <div className="flex justify-between items-center mt-4 mb-8">
-            <div className=" rounded-xl border border-gray-400 flex gap-3 items-center">
+            <AddToCartButton product={product}/>
+            
+            <p>Something Here</p>
+            {/* <div className=" rounded-xl border border-gray-400 flex gap-3 items-center">
               <button className="border-r border-gray-400 px-4 py-2">
                 <Minus />
               </button>
@@ -58,11 +63,7 @@ export default async function ProductDetailsPage({ params: { slug } }) {
               <button className="border-l border-gray-400 px-4 py-2">
                 <Plus />
               </button>
-            </div>
-            <button className="flex items-center text-white space-x-2 bg-lime-600 px-2 py-2 rounded-md">
-              <BaggageClaim />
-              <span>Add to Cart</span>
-            </button>
+            </div> */}
           </div>
         </div>
         <div className="col-span-3 bg-white border border-gray-300 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 text-slate-800 overflow-hidden hidden sm:block">
@@ -122,7 +123,7 @@ export default async function ProductDetailsPage({ params: { slug } }) {
         <h2 className="mb-4 text-xl font-semibold text-slate-200 ml-3 ">
           Similar Products
         </h2>
-        <CategoryCarousel products="" />
+        <CategoryCarousel products={products} />
       </div>
     </div>
   );

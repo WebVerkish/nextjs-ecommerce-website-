@@ -93,3 +93,18 @@ body {
 ::-webkit-scrollbar-button:hover{
   background-color: #666;
 }
+
+.swiper-container {
+  list-style: none;
+}
+.pagination {
+  bottom: 0;
+  padding-bottom: 4px;
+}
+.slide {
+  text-align: center;
+  height: 320px;
+  line-height: 320px;
+  background: #364d79;
+  overflow: hidden;
+}

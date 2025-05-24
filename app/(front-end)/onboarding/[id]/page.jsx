@@ -1,17 +1,38 @@
-import NewFarmerForm from "@/components/backoffice/NewFarmerForm";
-import { getData } from "@/lib/getData";
+
+import StepForm from "@/components/Onboarding/StepForm";
+import Steps from "@/components/Onboarding/Steps";
 import React from "react";
 
-export default async function page({ params }) {
-  const { id } = await params;
-  const user = await getData(`users/${id}`);
-  //console.log(user);
+export default function page({params:{id}}) {
+  const steps = [
+    {
+      number:1,
+      title:"Basic Information",
+    },
+    {
+      number:2,
+      title:"Farm Details",
+    },
+    {
+      number:3,
+      title: "Additional Information",
+    },
+    {
+      number:4,
+      title: "Summary",
+    },
+    
+  ];
   return (
-    <div className="flex flex-col gap-6 p-16">
-      <div className="max-w-4xl p-4 mx-auto">
-        <h2>Hello {user?.name}, Tell More About Your Self</h2>
+    <div className="bg-slate-200 dark:bg-slate-950 min-h-screen">
+      <div className="max-w-3xl my-6 mx-auto border border-slate-300 p-6 rounded-md">
+        {/* {Steps} */}
+        <Steps steps={steps} />
+        <div className="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+          {/* {form} */}
+          <StepForm farmerId={id}/>
+        </div>
       </div>
-      <NewFarmerForm user={user} />
     </div>
   );
 }

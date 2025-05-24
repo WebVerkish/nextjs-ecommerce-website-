@@ -4,6 +4,7 @@ import DateColumn from "@/components/DataTableColumns/DateColumn";
 import ImageColumn from "@/components/DataTableColumns/ImageColumn";
 import SortableColumn from "@/components/DataTableColumns/SortableColumn";
 import ActionColumn from "@/components/DataTableColumns/ActionColumn";
+import Status from "@/components/DataTableColumns/Status";
 
 export const columns = [
   {
@@ -52,6 +53,15 @@ export const columns = [
       const role = row.getValue("role");
       return <div className="line-clamp-1">{role}</div>;
     },
+  },
+   {
+    accessorKey: "plan",
+    header: "Plan",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => <Status row={row} accessorKey="status" />,
   },
   // {
   //   accessorKey: "farmerPhone",
