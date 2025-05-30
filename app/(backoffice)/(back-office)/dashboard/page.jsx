@@ -16,12 +16,12 @@ export default async function page() {
   const sales = await getData("sales");
   const orders = await getData("orders");
   const products = await getData("products");
-  // if(role === "FARMER"){
-  //   return <FarmerDashboard/>
-  // }
-  // if(role === "USER"){
-  //   return <UserDashboard/>
-  // }
+  if(role === "FARMER"){
+    return <FarmerDashboard/>
+  }
+  if(role === "USER"){
+    return <UserDashboard/>
+  }
   return (
     <div>
       <Heading title="Dashboard Overview"></Heading>
