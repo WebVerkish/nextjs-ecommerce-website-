@@ -6,7 +6,7 @@ import Link from "next/link";
 import React from "react";
 
 export default async function page({ params: { slug } }) {
-  const market = await getData(`markets/details/${slug}`);
+  const market = await getData(`markets/details/${params.slug}`);
   const marketCategoriesIds = market.categoryIds;
 
   const categoriesData = await getData("categories");

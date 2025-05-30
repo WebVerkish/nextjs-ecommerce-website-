@@ -10,14 +10,14 @@ import Link from "next/link";
 import React from "react";
 
 export default async function ProductDetailsPage({ params: { slug } }) {
-  const product = await getData(`products/product/${slug}`);
+  const product = await getData(`products/product/${params.slug}`);
   const productId = product.id;
   const catId = product.categoryId;
   const category = await getData(`categories/${catId}`);
   const categoryProducts = category.products;
   const products = categoryProducts.filter((product)=>product.id !== productId);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const urlToShare = `${baseUrl}/product/${slug}`;
+  const urlToShare = `${baseUrl}/product/${params.slug}`;
   return (
     <div>
       <Breadcrumb />
