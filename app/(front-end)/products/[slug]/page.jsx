@@ -10,7 +10,7 @@ import Link from "next/link";
 import React from "react";
 
 export default async function ProductDetailsPage({ params: { slug } }) {
-  const product = await getData(`products/product/${params.slug}`);
+  const product = await getData(`products/product/${slug}`);
   const productId = product.id;
   const catId = product.categoryId;
   const category = await getData(`categories/${catId}`);
