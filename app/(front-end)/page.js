@@ -30,12 +30,14 @@ export default async function Home() {
       ) : (
         <div className="text-center py-8">No categories available.</div>
       )}
-      <div className="py-8">
-        <CommunityTrainings
-          title="Featured Trainigs"
-          trainings={trainings.slice(0, 3)}
-        />
-      </div>
+      {Array.isArray(trainings) && (
+        <div className="py-8">
+          <CommunityTrainings
+            title="Featured Trainings"
+            trainings={trainings.slice(0, 3)}
+          />
+        </div>
+      )}
       {/* <h2 className="text-4xl">Welcome to Ecommerce Site</h2>
       <Link className="my-4 underline" href="/register-farmer">Become a farmer / Vendor / Supplier</Link> */}
     </div>
