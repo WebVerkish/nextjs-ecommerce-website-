@@ -14,14 +14,12 @@ export default async function ProductDetailsPage({ params: { slug } }) {
   const productId = product.id;
   const catId = product.categoryId;
   const category = await getData(`categories/${catId}`);
-  const categoryProducts = category.products;
+
+  let products = [];
   if (!category || !Array.isArray(category.products)) {
-    // If no category or no products, default to empty array
-    const products = [];
+    products = [];
   } else {
-    const products = category.products.filter(
-      (product) => product.id !== productId
-    );
+    products = category.products.filter((product) => product.id !== productId);
   }
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const urlToShare = `${baseUrl}/product/${slug}`;
