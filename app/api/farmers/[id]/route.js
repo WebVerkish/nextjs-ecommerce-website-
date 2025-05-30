@@ -58,73 +58,73 @@ export async function DELETE(request, { params: { id } }) {
   }
 }
 //farmer status and emailVerified details update
-export async function PUT(request, { params: { id } }) {
-  try {
-    const
-        {
-          title,
-          code,
-          farmerEmail,
-          farmerPhone,
-          farmerAddress,
-          farmerContactPerson,
-          farmerContactPersonPhone,
-          farmerPaymentTerms,
-          farmerNotes,
-          isActive, // Default to true if missing
-          profileImageUrl,
-          products,
-          landSize, // Avoid NaN
-          mainCrop,
-          userId, // Assigned above
-        } = await request.json();
-    const Farmer = {
-      title,
-      code,
-      farmerEmail,
-      farmerPhone,
-      farmerAddress,
-      farmerContactPerson,
-      farmerContactPersonPhone,
-      farmerPaymentTerms,
-      farmerNotes,
-      isActive, // Default to true if missing
-      profileImageUrl,
-      products,
-      landSize, // Avoid NaN
-      mainCrop,
-      userId, // Assigned above
-    }
-    const existingFarmer = await db.farmerProfile.findUnique({
-      where: {
-        id,
-      },
-    });
-    if (!existingFarmer) {
-      return NextResponse.json(
-        {
-          data: null,
-          message: "Not Found Coupon",
-        },
-        { status: 409 }
-      );
-    }
-    const updateFarmer = await db.farmerProfile.update({
-      where: { id },
-      data: Farmer,
-    });
-    return NextResponse.json(updateFarmer);
-  } catch (error) {
-    //console.log(error);
-    return NextResponse.json(
-      {
-        message: "Failed to Update Coupon",
-        error,
-      },
-      { status: 500 }
-    );
-  }
-}
+// export async function PUT(request, { params: { id } }) {
+//   try {
+//     const
+//         {
+//           title,
+//           code,
+//           farmerEmail,
+//           farmerPhone,
+//           farmerAddress,
+//           farmerContactPerson,
+//           farmerContactPersonPhone,
+//           farmerPaymentTerms,
+//           farmerNotes,
+//           isActive, // Default to true if missing
+//           profileImageUrl,
+//           products,
+//           landSize, // Avoid NaN
+//           mainCrop,
+//           userId, // Assigned above
+//         } = await request.json();
+//     const Farmer = {
+//       title,
+//       code,
+//       farmerEmail,
+//       farmerPhone,
+//       farmerAddress,
+//       farmerContactPerson,
+//       farmerContactPersonPhone,
+//       farmerPaymentTerms,
+//       farmerNotes,
+//       isActive, // Default to true if missing
+//       profileImageUrl,
+//       products,
+//       landSize, // Avoid NaN
+//       mainCrop,
+//       userId, // Assigned above
+//     }
+//     const existingFarmer = await db.farmerProfile.findUnique({
+//       where: {
+//         id,
+//       },
+//     });
+//     if (!existingFarmer) {
+//       return NextResponse.json(
+//         {
+//           data: null,
+//           message: "Not Found Coupon",
+//         },
+//         { status: 409 }
+//       );
+//     }
+//     const updateFarmer = await db.farmerProfile.update({
+//       where: { id },
+//       data: Farmer,
+//     });
+//     return NextResponse.json(updateFarmer);
+//   } catch (error) {
+//     //console.log(error);
+//     return NextResponse.json(
+//       {
+//         message: "Failed to Update Coupon",
+//         error,
+//       },
+//       { status: 500 }
+//     );
+//   }
+// }
 //farmer details update
 export async function PUT(request, { params: { id } }) {
   try {
