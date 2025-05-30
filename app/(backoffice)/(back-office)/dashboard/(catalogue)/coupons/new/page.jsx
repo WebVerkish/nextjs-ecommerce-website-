@@ -8,7 +8,7 @@ export default function NewCoupon() {
   return (
     <div>
       <FormHeader title="New Coupon" />
-      <NewCouponForm/>
+      <NewCouponForm updateData={{}}/>
     </div>
   );
 }

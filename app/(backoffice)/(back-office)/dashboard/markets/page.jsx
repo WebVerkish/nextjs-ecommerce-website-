@@ -8,7 +8,7 @@ import React from "react";
 import { columns } from "./columns";
 
 export default async function page() {
-  const markets = await getData("markets");
+  const markets = (await getData("markets"))??[];
   return (
     <div>
       {/* {Header} */}

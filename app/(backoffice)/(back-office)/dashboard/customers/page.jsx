@@ -11,7 +11,11 @@ import { authOptions } from "@/lib/authOptions";
 import Product from "@/components/frontend/Product";
 
 export default async function page() {
-    const customers = await getData("customers");
+   const customers = (await getData("customers")) ?? [];
+
+  if (!Array.isArray(customers)) {
+    throw new Error("Invalid data format returned from getData('customers')");
+  }
   return (
     <div>
       {/* {Header} */}
