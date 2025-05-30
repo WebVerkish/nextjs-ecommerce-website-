@@ -21,15 +21,20 @@ export default async function Home() {
     <div className="min-h-screen">
       <Hero />
       <MarketList />
-      {categories.map((category, index) => {
-        return (
+      {Array.isArray(categories) && categories.length > 0 ? (
+        categories.map((category, index) => (
           <div className="py-8" key={index}>
-            <CategoryList category={category}/>
+            <CategoryList category={category} />
           </div>
-        );
-      })}
+        ))
+      ) : (
+        <div className="text-center py-8">No categories available.</div>
+      )}
       <div className="py-8">
-        <CommunityTrainings title="Featured Trainigs" trainings={trainings.slice(0,3)}/>
+        <CommunityTrainings
+          title="Featured Trainigs"
+          trainings={trainings.slice(0, 3)}
+        />
       </div>
       {/* <h2 className="text-4xl">Welcome to Ecommerce Site</h2>
       <Link className="my-4 underline" href="/register-farmer">Become a farmer / Vendor / Supplier</Link> */}
