@@ -24,7 +24,7 @@ export default async function ProductDetailsPage({ params: { slug } }) {
     );
   }
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const urlToShare = `${baseUrl}/product/${params.slug}`;
+  const urlToShare = `${baseUrl}/product/${slug}`;
   return (
     <div>
       <Breadcrumb />

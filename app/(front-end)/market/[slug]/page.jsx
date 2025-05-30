@@ -7,7 +7,9 @@ import React from "react";
 
 export default async function page({ params: { slug } }) {
   const market = await getData(`markets/details/${slug}`);
-  const marketCategoriesIds = market.categoryIds;
+  const marketCategoriesIds = Array.isArray(market.categoryIds)
+    ? market.categoryIds
+    : [];
 
   const categoriesData = await getData("categories");
   const categories = categoriesData.filter(
