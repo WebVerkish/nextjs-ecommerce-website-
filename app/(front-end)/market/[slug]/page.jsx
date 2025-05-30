@@ -10,15 +10,17 @@ export default async function page({ params: { slug } }) {
   const marketCategoriesIds = market.categoryIds;
 
   const categoriesData = await getData("categories");
-  const categories = categoriesData.filter((category) => {
-    return category.products.length >= 1;
-  });
+  const categories = categoriesData.filter(
+    (category) =>
+      Array.isArray(category.products) && category.products.length >= 1
+  );
+
   const marketCategories = categories.filter((category) =>
     marketCategoriesIds.includes(category.id)
   );
   return (
     <>
-     <Breadcrumb/>
+      <Breadcrumb />
       <div className="">
         <div className="grid grid-cols-12 py-8 w-full gap-4 mb-6">
           <div className="col-span-12 sm:block p-4  dark:text-slate-50 bg-white border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-700 text-slate-800 overflow-hidden hidden">
