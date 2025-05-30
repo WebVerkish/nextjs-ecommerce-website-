@@ -23,7 +23,6 @@ export async function GET(request, { params: { id } }) {
     );
   }
 }
-
 export async function DELETE(request, { params: { id } }) {
   try {
     const existingFarmer = await db.user.findUnique({
