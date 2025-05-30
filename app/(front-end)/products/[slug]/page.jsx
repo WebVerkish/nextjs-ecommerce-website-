@@ -15,14 +15,24 @@ export default async function ProductDetailsPage({ params: { slug } }) {
   const catId = product.categoryId;
   const category = await getData(`categories/${catId}`);
   const categoryProducts = category.products;
-  const products = categoryProducts.filter((product)=>product.id !== productId);
+  if (!category || !Array.isArray(category.products)) {
+    // If no category or no products, default to empty array
+    const products = [];
+  } else {
+    const products = category.products.filter(
+      (product) => product.id !== productId
+    );
+  }
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const urlToShare = `${baseUrl}/product/${params.slug}`;
   return (
     <div>
       <Breadcrumb />
       <div className="grid grid-cols-12 gap-5 mb-8">
-        <ProductImageCrousel productImages={product.productImages} thumbnail={product.imageUrl}/>
+        <ProductImageCrousel
+          productImages={product.productImages}
+          thumbnail={product.imageUrl}
+        />
         <div className="col-span-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl lg:text-3xl">{product.title}</h2>
@@ -31,9 +41,7 @@ export default async function ProductDetailsPage({ params: { slug } }) {
             </button>
           </div>
           <div className="border-b border-gray-400">
-            <p className="py-2 ">
-              {product.description}
-            </p>
+            <p className="py-2 ">{product.description}</p>
             <div className="flex items-center gap-8 mb-4">
               <p>SKU :{product.sku}</p>
               <p className="bg-lime-100 py-1.5 px-4 rounded-full text-slate-900">
@@ -44,7 +52,9 @@ export default async function ProductDetailsPage({ params: { slug } }) {
           <div className="flex items-center justify-between gap-2 pt-4 border-b border-gray-400 pb-4">
             <div className="flex items-center gap-2 pt-4">
               <h4 className="text-2xl">${product.salePrice}</h4>
-              <del className="text-slate-400 text-sm">${product.productPrice}</del>
+              <del className="text-slate-400 text-sm">
+                ${product.productPrice}
+              </del>
             </div>
             <p className="flex items-center">
               <Tag className="w-5 h-5 text-slate-400  me-2" />
@@ -52,8 +62,8 @@ export default async function ProductDetailsPage({ params: { slug } }) {
             </p>
           </div>
           <div className="flex justify-between items-center mt-4 mb-8">
-            <AddToCartButton product={product}/>
-            
+            <AddToCartButton product={product} />
+
             <p>Something Here</p>
             {/* <div className=" rounded-xl border border-gray-400 flex gap-3 items-center">
               <button className="border-r border-gray-400 px-4 py-2">
