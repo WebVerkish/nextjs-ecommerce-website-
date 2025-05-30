@@ -10,10 +10,6 @@ import Link from "next/link";
 
 export default async function Home() {
   const categories = await getData("categories");
-  // const categories = categoriesData.filter((category)=>{
-  //   return category.products.length >= 1
-  // })
-  //console.log(categories)
   const session = await getServerSession(authOptions);
   console.log(session?.user);
   const trainings = await getData("trainings");
