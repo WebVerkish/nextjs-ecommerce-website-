@@ -7,7 +7,15 @@ import React from "react";
 export default async function page({ params: { id } }) {
   const order = await getData(`orders/${id}`);
   console.log(order);
-  const { orderItems } = order ;
+  if (!order || !Array.isArray(order.orderItems)) {
+    return (
+      <div className="p-8 text-center text-red-500">
+        Order not found or missing items. Please check your order ID.
+      </div>
+    );
+  }
+
+  const { orderItems } = order;
   const subTotal = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
   return (
     <section className="py-12 dark:bg-slate-950 bg-slate-50 sm:py-16 lg:py-20">
